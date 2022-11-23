@@ -32,6 +32,7 @@ pub type HGDIOBJ = HANDLE;
 pub type LPPOINT = *mut POINT;
 pub type HBITMAP = HANDLE;
 pub type RGBQUAD = tagRGBQUAD;
+pub type WORD = c_ushort;
 
 pub const WM_COMMAND: u32 = 0x0111;
 pub const WM_CLOSE: u32 = 0x0010;

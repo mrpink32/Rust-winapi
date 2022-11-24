@@ -4,33 +4,84 @@
 use core::ffi::*;
 // use std::os::windows::raw::HANDLE;
 
-pub type PVOID = *mut c_void;
+// pub type APIENTRY
+pub type ATOM = WORD;
+pub type BOOL = c_int;
+pub type BOOLEAN = BYTE;
+pub type BYTE = c_uchar;
+// pub type CALLBACK
+pub type CCHAR = c_char;
+pub type CHAR = c_char;
+pub type COLORREF = DWORD;
+// pub type CONST
+pub type DWORD = c_ulong;
+pub type DWORDLONG = c_ulonglong;
+pub type DWORD_PTR = ULONG_PTR;
+pub type DWORD32 = c_uint;
+pub type DWORD64 = c_ulonglong;
+pub type FLOAT = c_float;
+pub type HACCEL = HANDLE;
+// pub type HALF_PTR = if x64 int else short
 pub type HANDLE = PVOID;
-pub type HINSTANCE = HANDLE;
-pub type HICON = HANDLE;
-pub type HDC = HANDLE;
-pub type HCURSOR = HICON;
+pub type HBITMAP = HANDLE;
 pub type HBRUSH = HANDLE;
-pub type LPCWSTR = *const u16;
+pub type HCOLORSPACE = HANDLE;
+pub type HCONV = HANDLE;
+pub type HCONVLIST = HANDLE;
+pub type HCURSOR = HICON;
+pub type HDC = HANDLE;
+pub type HDDEDATA = HANDLE;
+pub type HDESK = HANDLE;
+pub type HDROP = HANDLE;
+pub type HDWP = HANDLE;
+pub type HENHMETAFILE = HANDLE;
+pub type HFILE = c_int;
+pub type HFONT = HANDLE;
+pub type HGDIOBJ = HANDLE;
+pub type HGLOBAL = HANDLE;
+pub type HHOOK = HANDLE;
+pub type HICON = HANDLE;
+pub type HINSTANCE = HANDLE;
+pub type HKEY = HANDLE;
+pub type HKL = HANDLE;
+pub type HLOCAL = HANDLE;
+pub type HMENU = HANDLE;
+pub type HMETAFILE = HANDLE;
+pub type HMODULE = HINSTANCE;
+pub type HMONITOR = HANDLE; // todo! if (WINVER >= 0x0500)
+pub type HPALETTE = HANDLE;
+pub type HPEN = HANDLE;
+pub type HRESULT = LONG;
+pub type HRGN = HANDLE;
+pub type HRSRC = HANDLE;
+pub type HSZ = HANDLE;
+pub type HWINSTA = HANDLE;
 pub type HWND = HANDLE;
+pub type INT = c_int;
+pub type INT_PTR = c_int;
+/* todo!
+#if defined(_WIN64)
+ typedef __int64 INT_PTR;
+#else
+ typedef int INT_PTR;
+#endif
+*/
+pub type INT8 = c_char;
+pub type INT16 = c_short;
+pub type INT32 = c_int;
+pub type INT64 = c_long;
+
+pub type PVOID = *mut c_void;
+pub type LPCWSTR = *const u16;
 pub type WPARAM = usize;
 pub type LPARAM = isize;
 pub type LRESULT = isize;
-pub type HMENU = HANDLE;
 pub type LPVOID = *mut c_void;
 pub type LPMSG = *mut MSG;
-pub type ATOM = c_ulong;
-pub type BOOL = bool;
-pub type DWORD = c_ulong;
 pub type UINT = c_uint;
-pub type COLORREF = DWORD;
 pub type LPCOLORREF = *mut COLORREF;
-pub type BYTE = c_uchar;
 pub type PBYTE = *mut BYTE;
-pub type HPEN = HANDLE;
-pub type HGDIOBJ = HANDLE;
 pub type LPPOINT = *mut POINT;
-pub type HBITMAP = HANDLE;
 pub type RGBQUAD = tagRGBQUAD;
 pub type WORD = c_ushort;
 pub type LONG32 = c_int;

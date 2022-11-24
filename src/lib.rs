@@ -4,9 +4,9 @@
 use core::ffi::*;
 // use std::os::windows::raw::HANDLE;
 
-// pub type APIENTRY
+// pub type APIENTRY = WINAPI;
 pub type ATOM = WORD;
-pub type BOOL = c_int;
+pub type BOOL = bool; // c_int;
 pub type BOOLEAN = BYTE;
 pub type BYTE = c_uchar;
 // pub type CALLBACK

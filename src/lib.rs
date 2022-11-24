@@ -21,7 +21,13 @@ pub type DWORD32 = c_uint;
 pub type DWORD64 = c_ulonglong;
 pub type FLOAT = c_float;
 pub type HACCEL = HANDLE;
-// pub type HALF_PTR = if x64 int else short
+pub type HALF_PTR = c_int;
+/* todo!
+#ifdef _WIN64
+ typedef int HALF_PTR;
+#else
+ typedef short HALF_PTR;
+#endif */
 pub type HANDLE = PVOID;
 pub type HBITMAP = HANDLE;
 pub type HBRUSH = HANDLE;
@@ -69,8 +75,47 @@ pub type INT8 = c_char;
 pub type INT16 = c_short;
 pub type INT32 = c_int;
 pub type INT64 = c_long;
-
+pub type LANGID = WORD;
+pub type LCID = DWORD;
+pub type LCTYPE = DWORD;
+pub type LGRPID = DWORD;
 pub type LONG = c_long;
+pub type LONGLONG = c_double;
+/* todo!
+#if !defined(_M_IX86)
+ typedef __int64 LONGLONG;
+#else
+ typedef double LONGLONG;
+#endif */
+pub type LONG_PTR = c_long;
+/* todo!
+#if defined(_WIN64)
+ typedef __int64 LONG_PTR;
+#else
+ typedef long LONG_PTR;
+#endif */
+pub type LONG32 = c_int;
+pub type LONG64 = c_longlong;
+pub type LPARAM = LONG_PTR;
+pub type LPBOOL = *mut BOOL;
+pub type LPBYTE = *mut BYTE;
+pub type LPCOLORREF = *mut DWORD;
+// pub type LPCSTR
+pub type LPCTSTR = LPCWSTR;
+/* todo!
+#ifdef UNICODE
+ typedef LPCWSTR LPCTSTR;
+#else
+ typedef LPCSTR LPCTSTR;
+#endif */
+pub type LPCVOID = *const c_void;
+pub type LPCWSTR = *const u16;
+pub type LPDWORD = *mut DWORD;
+pub type LPHANDLE = *mut HANDLE;
+pub type LPINT = *mut c_int;
+pub type LPLONG = *mut c_long;
+pub type LPSTR = *mut CHAR;
+pub type PVOID = *mut c_void;
 pub type ULONG_PTR = c_ulong;
 /* todo!
 #if defined(_WIN64)
@@ -78,20 +123,15 @@ pub type ULONG_PTR = c_ulong;
 #else
  typedef unsigned long ULONG_PTR;
 #endif */
-pub type PVOID = *mut c_void;
-pub type LPCWSTR = *const u16;
 pub type WPARAM = usize;
-pub type LPARAM = isize;
 pub type LRESULT = isize;
 pub type LPVOID = *mut c_void;
 pub type LPMSG = *mut MSG;
 pub type UINT = c_uint;
-pub type LPCOLORREF = *mut COLORREF;
 pub type PBYTE = *mut BYTE;
 pub type LPPOINT = *mut POINT;
 pub type RGBQUAD = tagRGBQUAD;
 pub type WORD = c_ushort;
-pub type LONG32 = c_int;
 
 pub const WM_COMMAND: u32 = 0x0111;
 pub const WM_CLOSE: u32 = 0x0010;

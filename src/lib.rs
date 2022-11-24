@@ -64,13 +64,20 @@ pub type INT_PTR = c_int;
  typedef __int64 INT_PTR;
 #else
  typedef int INT_PTR;
-#endif
-*/
+#endif */
 pub type INT8 = c_char;
 pub type INT16 = c_short;
 pub type INT32 = c_int;
 pub type INT64 = c_long;
 
+pub type LONG = c_long;
+pub type ULONG_PTR = c_ulong;
+/* todo!
+#if defined(_WIN64)
+ typedef unsigned __int64 ULONG_PTR;
+#else
+ typedef unsigned long ULONG_PTR;
+#endif */
 pub type PVOID = *mut c_void;
 pub type LPCWSTR = *const u16;
 pub type WPARAM = usize;

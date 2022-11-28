@@ -274,6 +274,17 @@ pub struct tagPIXELFORMATDESCRIPTOR {
     dwDamageMask: DWORD,
 }
 
+impl Default for PIXELFORMATDESCRIPTOR {
+    #[inline]
+    #[must_use]
+    fn default() -> Self {
+        let mut out: Self = unsafe { core::mem::zeroed() };
+        out.nSize = core::mem::size_of::<Self>() as WORD;
+        out.nVersion = 1;
+        out
+    }
+}
+
 #[repr(C)]
 pub struct tagBITMAP {
     bmType: LONG,

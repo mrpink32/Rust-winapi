@@ -157,6 +157,17 @@ pub const WS_EX_WINDOWEDGE: DWORD = 0x00000100;
 
 pub const CW_USEDEFAULT: c_int = 0x80000000_u32 as c_int;
 
+/// Allocates a unique device context for each window in the class.
+pub const CS_OWNDC: u32 = 0x0020;
+
+/// Redraws the entire window if a movement or size adjustment changes the width
+/// of the client area.
+pub const CS_HREDRAW: u32 = 0x0002;
+
+/// Redraws the entire window if a movement or size adjustment changes the
+/// height of the client area.
+pub const CS_VREDRAW: u32 = 0x0001;
+
 pub const SW_HIDE: c_int = 0;
 pub const SW_SHOWNORMAL: c_int = 1;
 pub const SW_SHOWMINIMIZED: c_int = 2;
@@ -227,6 +238,48 @@ macro_rules! unsafe_impl_default_zeroed {
 pub type WNDPROC = Option<
     unsafe extern "system" fn(hwnd: HWND, uMsg: UINT, wParam: WPARAM, lParam: LPARAM) -> LRESULT,
 >;
+
+#[repr(C)]
+pub struct tagPIXELFORMATDESCRIPTOR {
+    nSize: WORD,
+    nVersion: WORD,
+    dwFlags: DWORD,
+    iPixelType: BYTE,
+    cColorBits: BYTE,
+    cRedBits: BYTE,
+    cRefShift: BYTE,
+    cGreenBits: BYTE,
+    cGreenShift: BYTE,
+    cBlueBits: BYTE,
+    cBlueShift: BYTE,
+    cAlphaBits: BYTE,
+    cAlphaShift: BYTE,
+    cAccumBits: BYTE,
+    cAccumRedBits: BYTE,
+    cAccumGreenBits: BYTE,
+    cAccumBlueBits: BYTE,
+    cAccumAplhaBits: BYTE,
+    cDepthBits: BYTE,
+    cStencilBits: BYTE,
+    cAuxBuffers: BYTE,
+    iLayerType: BYTE,
+    bReserved: BYTE,
+    dwLayerMask: DWORD,
+    dwVisibleMask: DWORD,
+    dwDamageMask: DWORD,
+}
+
+#[repr(C)]
+pub struct tagBITMAP {
+    bmType: LONG,
+    bmWidth: LONG,
+    bmHeight: LONG,
+    bmWidthBytes: LONG,
+    bmPlanes: WORD,
+    bmBitsPixel: WORD,
+    bmBits: LPVOID,
+}
+unsafe_impl_default_zeroed!(tagBITMAP);
 
 #[repr(C)]
 pub struct WNDCLASSW {
@@ -312,6 +365,8 @@ extern "system" {
     pub fn DeleteObject(hObject: HGDIOBJ) -> BOOL;
     // ['SetPixel'] (https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-setpixel)
     pub fn SetPixel(hdc: HDC, c: c_int, y: c_int, color: COLORREF);
+
+    // pub fn
 }
 
 #[link(name = "Kernel32")]
@@ -413,4 +468,6 @@ extern "system" {
     pub fn GetKeyState(nVirtKey: c_int) -> c_short;
     // ['GetKeyboardState'] (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeyboardstate)
     pub fn GetKeyboardState(lpKeyState: PBYTE) -> BOOL;
+    // ['GetDC'] (https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdc)
+    pub fn GetDC(hWnd: HWND) -> HDC;
 }

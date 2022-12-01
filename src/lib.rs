@@ -1,8 +1,11 @@
-#![no_std]
+// #![no_std]
 #![no_main]
+#![allow(unused_variables, non_camel_case_types)]
 
+extern crate alloc;
+use alloc::vec::Vec;
 use core::ffi::*;
-// use std::os::windows::raw::HANDLE;
+// use std::{os::windows::raw::HANDLE, ffi::*};
 
 // pub type APIENTRY = WINAPI;
 pub type ATOM = WORD;
@@ -198,6 +201,42 @@ pub const PM_NOREMOVE: u32 = 0x0000;
 pub const PM_REMOVE: u32 = 0x0001;
 pub const PM_NOYIELD: u32 = 0x0002;
 
+/// [`PIXELFORMATDESCRIPTOR`] pixel type
+pub const PFD_TYPE_RGBA: u8 = 0;
+/// [`PIXELFORMATDESCRIPTOR`] pixel type
+pub const PFD_TYPE_COLORINDEX: u8 = 1;
+
+/// [`PIXELFORMATDESCRIPTOR`] layer type
+pub const PFD_MAIN_PLANE: u8 = 0;
+/// [`PIXELFORMATDESCRIPTOR`] layer type
+pub const PFD_OVERLAY_PLANE: u8 = 1;
+/// [`PIXELFORMATDESCRIPTOR`] layer type
+pub const PFD_UNDERLAY_PLANE: u8 = u8::MAX /* was (-1) */;
+
+pub const PFD_DOUBLEBUFFER: u32 = 0x00000001;
+pub const PFD_STEREO: u32 = 0x00000002;
+pub const PFD_DRAW_TO_WINDOW: u32 = 0x00000004;
+pub const PFD_DRAW_TO_BITMAP: u32 = 0x00000008;
+pub const PFD_SUPPORT_GDI: u32 = 0x00000010;
+pub const PFD_SUPPORT_OPENGL: u32 = 0x00000020;
+pub const PFD_GENERIC_FORMAT: u32 = 0x00000040;
+pub const PFD_NEED_PALETTE: u32 = 0x00000080;
+pub const PFD_NEED_SYSTEM_PALETTE: u32 = 0x00000100;
+pub const PFD_SWAP_EXCHANGE: u32 = 0x00000200;
+pub const PFD_SWAP_COPY: u32 = 0x00000400;
+pub const PFD_SWAP_LAYER_BUFFERS: u32 = 0x00000800;
+pub const PFD_GENERIC_ACCELERATED: u32 = 0x00001000;
+pub const PFD_SUPPORT_DIRECTDRAW: u32 = 0x00002000;
+pub const PFD_DIRECT3D_ACCELERATED: u32 = 0x00004000;
+pub const PFD_SUPPORT_COMPOSITION: u32 = 0x00008000;
+
+/// use with [`ChoosePixelFormat`] only
+pub const PFD_DEPTH_DONTCARE: u32 = 0x20000000;
+/// use with [`ChoosePixelFormat`] only
+pub const PFD_DOUBLEBUFFER_DONTCARE: u32 = 0x40000000;
+/// use with [`ChoosePixelFormat`] only
+pub const PFD_STEREO_DONTCARE: u32 = 0x80000000;
+
 pub const PS_SOLID: i32 = 0;
 pub const PS_DASH: i32 = 1;
 pub const PS_DOT: i32 = 2;
@@ -381,8 +420,19 @@ extern "system" {
     pub fn DeleteObject(hObject: HGDIOBJ) -> BOOL;
     // ['SetPixel'] (https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-setpixel)
     pub fn SetPixel(hdc: HDC, c: c_int, y: c_int, color: COLORREF);
-
-    // pub fn
+    /// [`ChoosePixelFormat`](https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-choosepixelformat)
+    pub fn ChoosePixelFormat(hdc: HDC, ppfd: *const PIXELFORMATDESCRIPTOR) -> c_int;
+    // pub unsafe fn choose_pixel_format(
+    //     hdc: HDC,
+    //     ppfd: &PIXELFORMATDESCRIPTOR,
+    // ) -> Result<c_int, Win32Error> {
+    //     let index = ChoosePixelFormat(hdc, ppfd);
+    //     if index != 0 {
+    //         Ok(index)
+    //     } else {
+    //         Err(get_last_error())
+    //     }
+    // }
 }
 
 #[link(name = "Kernel32")]
@@ -486,4 +536,23 @@ extern "system" {
     pub fn GetKeyboardState(lpKeyState: PBYTE) -> BOOL;
     // ['GetDC'] (https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdc)
     pub fn GetDC(hWnd: HWND) -> HDC;
+    /// [`ReleaseDC`](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasedc)
+    pub fn ReleaseDC(hWnd: HWND, hDC: HDC) -> c_int;
+}
+
+pub fn wide_null(string: &str) -> Vec<u16> {
+    string.encode_utf16().chain(Some(0)).collect()
+}
+
+pub fn rgb(r: BYTE, g: BYTE, b: BYTE) -> u32 {
+    let color: COLORREF =
+        r as COLORREF | ((g as WORD) << 8) as COLORREF | ((b as DWORD) << 16) as COLORREF;
+    return color;
+}
+
+#[test]
+fn rgb_test() {
+    assert_eq!(rgb(255, 0, 0), 255);
+    assert_eq!(rgb(0, 255, 0), 0b00000000_00000000_11111111_00000000);
+    assert_eq!(rgb(0, 0, 255), 0b00000000_11111111_00000000_00000000);
 }

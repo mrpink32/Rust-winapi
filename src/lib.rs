@@ -262,6 +262,8 @@ pub const WS_OVERLAPPEDWINDOW: DWORD =
     WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 pub const WS_SYSMENU: DWORD = 0x00080000;
 pub const WS_THICKFRAME: DWORD = 0x00040000;
+pub const WS_CLIPCHILDREN: u32 = 0x02000000;
+pub const WS_CLIPSIBLINGS: u32 = 0x04000000;
 
 pub const WS_EX_LEFT: DWORD = 0x00000000;
 pub const WS_EX_OVERLAPPEDWINDOW: DWORD = 0x00000100;
@@ -418,9 +420,9 @@ extern "system" {
     pub fn SetBkColor(hdc: HDC, color: COLORREF) -> COLORREF;
     // ['DeleteObject'] (https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-deleteobject)
     pub fn DeleteObject(hObject: HGDIOBJ) -> BOOL;
-    // ['SetPixel'] (https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-setpixel)
+    // [SetPixel] (https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-setpixel)
     pub fn SetPixel(hdc: HDC, c: c_int, y: c_int, color: COLORREF);
-    /// [`ChoosePixelFormat`](https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-choosepixelformat)
+    /// [ChoosePixelFormat](https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-choosepixelformat)
     pub fn ChoosePixelFormat(hdc: HDC, ppfd: *const PIXELFORMATDESCRIPTOR) -> c_int;
     // pub unsafe fn choose_pixel_format(
     //     hdc: HDC,
@@ -433,15 +435,28 @@ extern "system" {
     //         Err(get_last_error())
     //     }
     // }
+    /// [SetPixelFormat](https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-setpixelformat)
+    pub fn SetPixelFormat(hdc: HDC, format: c_int, ppfd: *const PIXELFORMATDESCRIPTOR) -> BOOL;
+    /// [DescribePixelFormat](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-describepixelformat)
+    pub fn DescribePixelFormat(
+        hdc: HDC,
+        iPixelFormat: c_int,
+        nBytes: UINT,
+        ppfd: LPPIXELFORMATDESCRIPTOR,
+    ) -> c_int;
 }
 
 #[link(name = "Kernel32")]
 extern "system" {
-    // ['GetLastError'](https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror)
+    /// [GetLastError](https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror)
     pub fn GetLastError() -> DWORD;
-    // ['GetModuleHandleExW'](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlew)
+    /// [GetModuleHandleExW](https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandleexw)
     pub fn GetModuleHandleExW(dwFlags: DWORD, lpModuleName: LPCWSTR) -> HINSTANCE;
-    // ['GetModuleHandleExW'](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlew)
+    /// If the function succeeds, the return value is a handle to the specified module.
+    /// If lpModuleName is NULL, GetModuleHandle returns a handle to the file used to create the calling process (.exe file).
+    /// If the function fails, the return value is NULL. To get extended error information, call GetLastError.
+    ///
+    /// [GetModuleHandleW](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlew)
     pub fn GetModuleHandleW(lpModuleName: LPCWSTR) -> HINSTANCE;
 }
 
@@ -555,4 +570,8 @@ fn rgb_test() {
     assert_eq!(rgb(255, 0, 0), 255);
     assert_eq!(rgb(0, 255, 0), 0b00000000_00000000_11111111_00000000);
     assert_eq!(rgb(0, 0, 255), 0b00000000_11111111_00000000_00000000);
+}
+
+pub fn get_module_handle_w(lp_module_nsame: LPCWSTR) -> HMODULE {
+    unsafe { GetModuleHandleW(lp_module_nsame) }
 }

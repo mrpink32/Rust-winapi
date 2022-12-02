@@ -9,7 +9,7 @@ use core::ffi::*;
 
 // pub type APIENTRY = WINAPI;
 pub type ATOM = WORD;
-pub type BOOL = bool; // c_int;
+pub type BOOL = c_int;
 pub type BOOLEAN = BYTE;
 pub type BYTE = c_uchar;
 // pub type CALLBACK

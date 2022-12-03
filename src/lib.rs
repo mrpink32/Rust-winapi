@@ -118,6 +118,17 @@ pub type LPHANDLE = *mut HANDLE;
 pub type LPINT = *mut c_int;
 pub type LPLONG = *mut c_long;
 pub type LPSTR = *mut CHAR;
+// pub type LPTSTR = LPWSTR;
+pub type LPVOID = *mut c_void;
+pub type LPWORD = *mut WORD;
+
+pub type LRESULT = isize;
+
+//
+//
+//
+//
+
 pub type PVOID = *mut c_void;
 pub type ULONG_PTR = c_ulong;
 /* todo!
@@ -128,8 +139,6 @@ pub type ULONG_PTR = c_ulong;
 #endif */
 pub type UINT = c_uint;
 pub type WPARAM = usize;
-pub type LRESULT = isize;
-pub type LPVOID = *mut c_void;
 pub type LPMSG = *mut MSG;
 pub type PBYTE = *mut BYTE;
 pub type LPPOINT = *mut POINT;

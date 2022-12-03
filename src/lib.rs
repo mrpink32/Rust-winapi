@@ -267,7 +267,7 @@ pub const WM_SIZE: u32 = 0x0005;
 pub const WM_NCCREATE: u32 = 0x0081;
 pub const WM_CREATE: u32 = 0x0001;
 
-// Window Styles
+// Window Styles (https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles)
 /// Description:
 /// The window has a thin-line border
 pub const WS_BORDER: DWORD = 0x00800000;
@@ -304,20 +304,42 @@ pub const WS_TILEDWINDOW: u32 =
 pub const WS_VISIBLE: u32 = 0x10000000;
 pub const WS_VSCROLL: u32 = 0x00200000;
 
-// Extended Window Styles
+// Extended Window Styles (https://learn.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles)
 /// Description:
 /// The window accepts drag-drop files.
-pub const WS_EX_ACCEPTFILES: u32 = 0x00000010;
+pub const WS_EX_ACCEPTFILES: DWORD = 0x00000010;
 /// Description:
 /// Forces a top-level window onto the taskbar when the window is visible.
-pub const WS_EX_APPWINDOW: u32 = 0x00040000;
+pub const WS_EX_APPWINDOW: DWORD = 0x00040000;
 /// Description:
 /// The window has a border with a sunken edge.
-pub const WS_EX_CLIENTEDGE: u32 = 0x00000200;
+pub const WS_EX_CLIENTEDGE: DWORD = 0x00000200;
+pub const WS_EX_COMPOSITED: DWORD = 0x02000000;
+pub const WS_EX_CONTEXTHELP: DWORD = 0x00000400;
+pub const WS_EX_CONTROLPARENT: DWORD = 0x00010000;
+pub const WS_EX_DLGMODALFRAME: DWORD = 0x00000001;
+pub const WS_EX_LAYERED: DWORD = 0x00080000;
+pub const WS_EX_LAYOUTRTL: DWORD = 0x00400000;
 pub const WS_EX_LEFT: DWORD = 0x00000000;
-pub const WS_EX_OVERLAPPEDWINDOW: DWORD = 0x00000100;
+pub const WS_EX_LEFTSCROLLBAR: DWORD = 0x00004000;
+pub const WS_EX_LTRREADING: DWORD = 0x00000000;
+pub const WS_EX_MDICHILD: DWORD = 0x00000040;
+pub const WS_EX_NOACTIVATE: DWORD = 0x08000000;
+pub const WS_EX_NOINHERITLAYOUT: DWORD = 0x00100000;
+pub const WS_EX_NOPARENTNOTIFY: DWORD = 0x00000004;
+pub const WS_EX_NOREDIRECTIONBITMAP: DWORD = 0x00200000;
+pub const WS_EX_OVERLAPPEDWINDOW: DWORD = WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE;
+pub const WS_EX_PALETTEWINDOW: DWORD = WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
+pub const WS_EX_RIGHT: DWORD = 0x00001000;
+pub const WS_EX_RIGHTSCROLLBAR: DWORD = 0x00000000;
+pub const WS_EX_RTLREADING: DWORD = 0x00002000;
+pub const WS_EX_STATICEDGE: DWORD = 0x00020000;
+pub const WS_EX_TOOLWINDOW: DWORD = 0x00000080;
+pub const WS_EX_TOPMOST: DWORD = 0x00000008;
+pub const WS_EX_TRANSPARENT: DWORD = 0x00000020;
 pub const WS_EX_WINDOWEDGE: DWORD = 0x00000100;
 
+//
 pub const CURSOR_SHOWING: DWORD = 0x00000001;
 pub const CURSOR_SUPPRESSED: DWORD = 0x00000002;
 

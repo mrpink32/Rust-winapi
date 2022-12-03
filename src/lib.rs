@@ -649,6 +649,8 @@ extern "system" {
     pub fn ReleaseDC(hWnd: HWND, hDC: HDC) -> c_int;
     /// [MessageBeep](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebeep)
     pub fn MessageBeep(uType: UINT) -> BOOL;
+    /// [`UpdateWindow`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-updatewindow)
+    pub fn UpdateWindow(hWnd: HWND) -> BOOL;
 }
 
 pub fn wide_null(string: &str) -> Vec<u16> {

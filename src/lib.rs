@@ -1,6 +1,6 @@
 // #![no_std]
 #![no_main]
-#![allow(unused_variables, non_camel_case_types)]
+#![allow(unused_variables, non_camel_case_types, non_snake_case)]
 
 extern crate alloc;
 use alloc::vec::Vec;
@@ -126,15 +126,19 @@ pub type ULONG_PTR = c_ulong;
 #else
  typedef unsigned long ULONG_PTR;
 #endif */
+pub type UINT = c_uint;
 pub type WPARAM = usize;
 pub type LRESULT = isize;
 pub type LPVOID = *mut c_void;
 pub type LPMSG = *mut MSG;
-pub type UINT = c_uint;
 pub type PBYTE = *mut BYTE;
 pub type LPPOINT = *mut POINT;
 pub type RGBQUAD = tagRGBQUAD;
 pub type WORD = c_ushort;
+
+pub type CURSORINFO = tagCURSORINFO;
+pub type PCURSORINFO = *mut CURSORINFO;
+pub type LPCURSORINFO = *mut CURSORINFO;
 
 // other types
 pub type PIXELFORMATDESCRIPTOR = tagPIXELFORMATDESCRIPTOR;
@@ -167,9 +171,19 @@ pub const SW_RESTORE: c_int = 9;
 pub const SW_SHOWDEFAULT: c_int = 10;
 pub const SW_FORCEMINIMIZE: c_int = 11;
 
-pub const MB_OK: u32 = 0x00000000;
 pub const MB_OKCANCEL: u32 = 1;
 pub const MB_YESNO: u32 = 4;
+
+// MessageBeep values
+pub const MB_ICONASTERISK: u32 = 0x00000040;
+pub const MB_ICONEXCLAMATION: u32 = 0x00000030;
+pub const MB_ICONERROR: u32 = 0x00000010;
+pub const MB_ICONHAND: u32 = 0x00000010;
+pub const MB_ICONINFORMATION: u32 = 0x00000040;
+pub const MB_ICONQUESTION: u32 = 0x00000020;
+pub const MB_ICONSTOP: u32 = 0x00000010;
+pub const MB_ICONWARNING: u32 = 0x00000030;
+pub const MB_OK: u32 = 0x00000000;
 
 pub const MF_BITMAP: u32 = 0x00000004;
 pub const MF_CHECKED: u32 = 0x00000008;
@@ -253,21 +267,50 @@ pub const WM_SIZE: u32 = 0x0005;
 pub const WM_NCCREATE: u32 = 0x0081;
 pub const WM_CREATE: u32 = 0x0001;
 
+// Window Styles
+/// Description:
+/// The window has a thin-line border
 pub const WS_BORDER: DWORD = 0x00800000;
+/// Description:
+/// The window has a title bar (includes the WS_BORDER style).
 pub const WS_CAPTION: DWORD = 0x00C00000;
-pub const WS_OVERLAPPED: DWORD = 0x00000000;
-pub const WS_MAXIMIZEBOX: DWORD = 0x00010000;
-pub const WS_MINIMIZEBOX: DWORD = 0x00020000;
-pub const WS_OVERLAPPEDWINDOW: DWORD =
-    WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
-pub const WS_SYSMENU: DWORD = 0x00080000;
-pub const WS_THICKFRAME: DWORD = 0x00040000;
+/// Description:
+/// The window is a child window. A window with this style cannot have a menu bar. This style cannot be used with the WS_POPUP style.
+pub const WS_CHILD: DWORD = 0x40000000;
+pub const WS_CHILDWINDOW: DWORD = 0x40000000;
 pub const WS_CLIPCHILDREN: u32 = 0x02000000;
 pub const WS_CLIPSIBLINGS: u32 = 0x04000000;
+pub const WS_DISABLED: u32 = 0x08000000;
+pub const WS_DLGFRAME: u32 = 0x00400000;
+pub const WS_GROUP: u32 = 0x00020000;
+pub const WS_HSCROLL: u32 = 0x00100000;
+pub const WS_ICONIC: u32 = 0x20000000;
+pub const WS_MAXIMIZE: u32 = 0x01000000;
+pub const WS_MAXIMIZEBOX: u32 = 0x00010000;
+pub const WS_MINIMIZE: DWORD = 0x20000000;
+pub const WS_MINIMIZEBOX: DWORD = 0x00020000;
+pub const WS_OVERLAPPED: DWORD = 0x00000000;
+pub const WS_OVERLAPPEDWINDOW: DWORD =
+    WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+pub const WS_POPUP: u32 = 0x80000000;
+pub const WS_POPUPWINDOW: u32 = WS_POPUP | WS_BORDER | WS_SYSMENU;
+pub const WS_SIZEBOX: u32 = 0x00040000;
+pub const WS_SYSMENU: u32 = 0x00080000;
+pub const WS_TABSTOP: u32 = 0x00010000;
+pub const WS_THICKFRAME: DWORD = 0x00040000;
+pub const WS_TILED: u32 = 0x00000000;
+pub const WS_TILEDWINDOW: u32 =
+    WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
+pub const WS_VISIBLE: u32 = 0x10000000;
+pub const WS_VSCROLL: u32 = 0x00200000;
 
+// Extended Window Styles
 pub const WS_EX_LEFT: DWORD = 0x00000000;
 pub const WS_EX_OVERLAPPEDWINDOW: DWORD = 0x00000100;
 pub const WS_EX_WINDOWEDGE: DWORD = 0x00000100;
+
+pub const CURSOR_SHOWING: DWORD = 0x00000001;
+pub const CURSOR_SUPPRESSED: DWORD = 0x00000002;
 
 macro_rules! unsafe_impl_default_zeroed {
     ($t:ty) => {
@@ -398,6 +441,15 @@ pub struct tagRGBQUAD {
     rgbGreen: BYTE,
     rgbRed: BYTE,
     rgbReserved: BYTE,
+}
+
+/// [CURSORINFO structure](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-cursorinfo)
+#[repr(C)]
+pub struct tagCURSORINFO {
+    cbSize: DWORD,
+    flags: DWORD,
+    hCursor: HCURSOR,
+    ptScreenPos: POINT,
 }
 
 #[link(name = "Gdi32")]
@@ -531,7 +583,7 @@ extern "system" {
     pub fn EndPaint(hWnd: HWND, lpPaint: *const PAINTSTRUCT) -> BOOL;
     // ['MessageBox'] (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebox)
     pub fn MessageBox(hWnd: HWND, lpText: LPCWSTR, lpCaption: LPCWSTR, uType: c_uint) -> c_int;
-    // ['GetClientRect'] (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getclientrect)
+    /// [GetClientRect](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getclientrect)
     pub fn GetClientRect(hWnd: HWND, lpRect: *mut RECT) -> BOOL;
     // ['MessageBoxW'] (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw)
     pub fn MessageBoxW(hWnd: HWND, lpText: LPCWSTR, lpCaption: LPCWSTR, uType: c_uint) -> c_int;
@@ -541,7 +593,9 @@ extern "system" {
     pub fn AppendMenuW(hMenu: HMENU, uFlags: UINT, uIDNewItem: UINT, lpNewItem: LPCWSTR) -> BOOL;
     // ['SetMenu'] (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setmenu)
     pub fn SetMenu(hWnd: HWND, hMenu: HMENU) -> BOOL;
-    // ['GetCursorPos'] (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getcursorpos)
+    /// [GetCursorInfo](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getcursorinfo)
+    pub fn GetCursorInfo(pci: PCURSORINFO) -> BOOL;
+    /// [GetCursorPos](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getcursorpos)
     pub fn GetCursorPos(lpPoint: LPPOINT) -> BOOL;
     // ['ScreenToClient'] (https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-screentoclient)
     pub fn ScreenToClient(hwnd: HWND, lpPoint: LPPOINT) -> BOOL;
@@ -553,6 +607,8 @@ extern "system" {
     pub fn GetDC(hWnd: HWND) -> HDC;
     /// [`ReleaseDC`](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasedc)
     pub fn ReleaseDC(hWnd: HWND, hDC: HDC) -> c_int;
+    /// [MessageBeep](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messagebeep)
+    pub fn MessageBeep(uType: UINT) -> BOOL;
 }
 
 pub fn wide_null(string: &str) -> Vec<u16> {

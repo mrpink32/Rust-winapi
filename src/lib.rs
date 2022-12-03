@@ -305,6 +305,15 @@ pub const WS_VISIBLE: u32 = 0x10000000;
 pub const WS_VSCROLL: u32 = 0x00200000;
 
 // Extended Window Styles
+/// Description:
+/// The window accepts drag-drop files.
+pub const WS_EX_ACCEPTFILES: u32 = 0x00000010;
+/// Description:
+/// Forces a top-level window onto the taskbar when the window is visible.
+pub const WS_EX_APPWINDOW: u32 = 0x00040000;
+/// Description:
+/// The window has a border with a sunken edge.
+pub const WS_EX_CLIENTEDGE: u32 = 0x00000200;
 pub const WS_EX_LEFT: DWORD = 0x00000000;
 pub const WS_EX_OVERLAPPEDWINDOW: DWORD = 0x00000100;
 pub const WS_EX_WINDOWEDGE: DWORD = 0x00000100;

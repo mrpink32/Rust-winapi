@@ -4,7 +4,7 @@
 
 extern crate alloc;
 use alloc::vec::Vec;
-use core::ffi::c_size_t;
+// use core::ffi::c_size_t;
 use core::ffi::*;
 // use std::{os::windows::raw::HANDLE, ffi::*};
 
@@ -145,7 +145,7 @@ pub type PBYTE = *mut BYTE;
 pub type LPPOINT = *mut POINT;
 pub type RGBQUAD = tagRGBQUAD;
 pub type WORD = c_ushort;
-pub type SIZE_T = c_size_t;
+pub type SIZE_T = usize; // c_size_t;
 
 pub type CURSORINFO = tagCURSORINFO;
 pub type PCURSORINFO = *mut CURSORINFO;

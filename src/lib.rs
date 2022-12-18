@@ -639,8 +639,8 @@ extern "system" {
         hInstance: HINSTANCE,
         lpParam: LPVOID,
     ) -> HWND;
-    // ['CreateWindowW'](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww)
-    pub fn CreateWindow(
+    // ['CreateWindowW'](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww)
+    pub fn CreateWindowW(
         lpClassName: LPCWSTR,
         lpWindowName: LPCWSTR,
         dwStyle: DWORD,

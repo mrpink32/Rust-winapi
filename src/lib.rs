@@ -639,11 +639,11 @@ extern "system" {
         hInstance: HINSTANCE,
         lpParam: LPVOID,
     ) -> HWND;
-    // ['CreateWindowW'](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindowexw)
-    pub fn CreateWindowW(
+    // ['CreateWindowW'](https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww)
+    pub fn CreateWindow(
         lpClassName: LPCWSTR,
         lpWindowName: LPCWSTR,
-        dwStyle: c_ulong,
+        dwStyle: DWORD,
         x: c_int,
         y: c_int,
         nWidth: c_int,

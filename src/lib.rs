@@ -195,6 +195,22 @@ pub const SW_RESTORE: c_int = 9;
 pub const SW_SHOWDEFAULT: c_int = 10;
 pub const SW_FORCEMINIMIZE: c_int = 11;
 
+pub const SWP_ASYNCWINDOWPOS: UINT = 0x4000;
+pub const SWP_DEFERERASE: UINT = 0x2000;
+pub const SWP_DRAWFRAME: UINT = 0x0020;
+pub const SWP_FRAMECHANGED: UINT = 0x0020;
+pub const SWP_HIDEWINDOW: UINT = 0x0080;
+pub const SWP_NOACTIVATE: UINT = 0x0010;
+pub const SWP_NOCOPYBITS: UINT = 0x0100;
+pub const SWP_NOMOVE: UINT = 0x0002;
+pub const SWP_NOOWNERZORDER: UINT = 0x0200;
+pub const SWP_NOREDRAW: UINT = 0x0008;
+pub const SWP_NOREPOSITION: UINT = 0x0200;
+pub const SWP_NOSENDCHANGING: UINT = 0x0400;
+pub const SWP_NOSIZE: UINT = 0x0001;
+pub const SWP_NOZORDER: UINT = 0x0004;
+pub const SWP_SHOWWINDOW: UINT = 0x0040;
+
 pub const MB_OKCANCEL: u32 = 1;
 pub const MB_YESNO: u32 = 4;
 

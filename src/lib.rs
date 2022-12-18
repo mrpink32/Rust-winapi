@@ -4,6 +4,7 @@
 
 extern crate alloc;
 use alloc::vec::Vec;
+use core::ffi::c_size_t;
 use core::ffi::*;
 // use std::{os::windows::raw::HANDLE, ffi::*};
 
@@ -144,6 +145,7 @@ pub type PBYTE = *mut BYTE;
 pub type LPPOINT = *mut POINT;
 pub type RGBQUAD = tagRGBQUAD;
 pub type WORD = c_ushort;
+pub type SIZE_T = c_size_t;
 
 pub type CURSORINFO = tagCURSORINFO;
 pub type PCURSORINFO = *mut CURSORINFO;
@@ -154,18 +156,31 @@ pub type PIXELFORMATDESCRIPTOR = tagPIXELFORMATDESCRIPTOR;
 pub type PPIXELFORMATDESCRIPTOR = *mut PIXELFORMATDESCRIPTOR;
 pub type LPPIXELFORMATDESCRIPTOR = *mut PIXELFORMATDESCRIPTOR;
 
-pub const CW_USEDEFAULT: c_int = 0x80000000_u32 as c_int;
+/// Button Styles
+pub const BS_PUSHBUTTON: u32 = 0x00000000;
+pub const BS_FLAT: u32 = 0x00008000;
 
+// Window Class Styles
+/// Aligns the window's client area on a byte boundary (in the x direction). This style affects the width of the window and its horizontal placement on the display.
+pub const CS_BYTEALIGNCLIENT: u32 = 0x1000;
+pub const CS_BYTEALIGNWINDOW: u32 = 0x2000;
+pub const CS_CLASSDC: u32 = 0x0040;
+pub const CS_DBLCLKS: u32 = 0x0008;
+pub const CS_DROPSHADOW: u32 = 0x00020000;
+pub const CS_GLOBALCLASS: u32 = 0x4000;
+/// Redraws the entire window if a movement or size adjustment changes the
+/// width of the client area.
+pub const CS_HREDRAW: u32 = 0x0002;
+pub const CS_NOCLOSE: u32 = 0x0200;
 /// Allocates a unique device context for each window in the class.
 pub const CS_OWNDC: u32 = 0x0020;
-
-/// Redraws the entire window if a movement or size adjustment changes the width
-/// of the client area.
-pub const CS_HREDRAW: u32 = 0x0002;
-
+pub const CS_PARENTDC: u32 = 0x0080;
+pub const CS_SAVEBITS: u32 = 0x0800;
 /// Redraws the entire window if a movement or size adjustment changes the
 /// height of the client area.
 pub const CS_VREDRAW: u32 = 0x0001;
+
+pub const CW_USEDEFAULT: c_int = 0x80000000_u32 as c_int;
 
 pub const SW_HIDE: c_int = 0;
 pub const SW_SHOWNORMAL: c_int = 1;
@@ -194,6 +209,22 @@ pub const MB_ICONSTOP: u32 = 0x00000010;
 pub const MB_ICONWARNING: u32 = 0x00000030;
 pub const MB_OK: u32 = 0x00000000;
 
+pub const MEM_DECOMMIT: u32 = 0x00004000;
+pub const MEM_RELEASE: u32 = 0x00008000;
+
+pub const MEM_COALESCE_PLACEHOLDERS: u32 = 0x00000001;
+pub const MEM_PRESERVE_PLACEHOLDER: u32 = 0x00000002;
+
+pub const MEM_COMMIT: u32 = 0x00001000;
+pub const MEM_RESERVE: u32 = 0x00002000;
+pub const MEM_RESET: u32 = 0x00080000;
+pub const MEM_RESET_UNDO: u32 = 0x1000000;
+
+pub const MEM_LARGE_PAGES: u32 = 0x20000000;
+pub const MEM_PHYSICAL: u32 = 0x00400000;
+pub const MEM_TOP_DOWN: u32 = 0x00100000;
+pub const MEM_WRITE_WATCH: u32 = 0x00200000;
+
 pub const MF_BITMAP: u32 = 0x00000004;
 pub const MF_CHECKED: u32 = 0x00000008;
 pub const MF_DISABLED: u32 = 0x00000010;
@@ -206,6 +237,9 @@ pub const MF_POPUP: u32 = 0x00000010;
 pub const MF_SEPARATOR: u32 = 0x00000800;
 pub const MF_STRING: u32 = 0x00000000;
 pub const MF_UNCHECKED: u32 = 0x00000000;
+
+pub const PAGE_READONLY: u32 = 0x02;
+pub const PAGE_READWRITE: u32 = 0x04;
 
 pub const IDOK: c_int = 1;
 pub const IDYES: c_int = 6;
@@ -550,6 +584,18 @@ extern "system" {
     ///
     /// [GetModuleHandleW](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlew)
     pub fn GetModuleHandleW(lpModuleName: LPCWSTR) -> HINSTANCE;
+    /// [`VirtualFree`](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualfree)
+    /// If the function succeeds, the return value is nonzero.
+    /// If the function fails, the return value is 0 (zero). To get extended error information, call GetLastError.
+    pub fn VirtualFree(lpAddress: LPVOID, dwSize: SIZE_T, dwFreeType: DWORD) -> BOOL;
+    /// [`VirtualAlloc`](https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc)
+    pub fn VirtualAlloc(
+        lpAddress: LPVOID,
+        dwSize: SIZE_T,
+        flAllocationType: DWORD,
+        flProtect: DWORD,
+    ) -> LPVOID;
+
 }
 
 #[link(name = "User32")]
@@ -651,6 +697,16 @@ extern "system" {
     pub fn MessageBeep(uType: UINT) -> BOOL;
     /// [`UpdateWindow`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-updatewindow)
     pub fn UpdateWindow(hWnd: HWND) -> BOOL;
+    /// [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos?redirectedfrom=MSDN)
+    pub fn SetWindowPos(
+        hWnd: HWND,
+        hWndInsertAfter: HWND,
+        X: c_int,
+        Y: c_int,
+        cx: c_int,
+        cy: c_int,
+        uFlags: UINT,
+    ) -> BOOL;
 }
 
 pub fn wide_null(string: &str) -> Vec<u16> {
@@ -670,6 +726,28 @@ fn rgb_test() {
     assert_eq!(rgb(0, 0, 255), 0b00000000_11111111_00000000_00000000);
 }
 
+// wrappers
+
+// needs more wrapping
+pub fn get_last_error() -> DWORD {
+    unsafe { GetLastError() }
+}
+
+// pub fn register_class_w(window_class: &WNDCLASSW) -> Result<ATOM, ()> {
+//     let atom = unsafe { RegisterClassW(windows_class) };
+//     if atom == 0 {
+//         Err(())
+//     } else {
+//         Ok(atom)
+//     }
+// }
+
+// done:
 pub fn get_module_handle_w(lp_module_nsame: LPCWSTR) -> HMODULE {
-    unsafe { GetModuleHandleW(lp_module_nsame) }
+    let module: HMODULE = unsafe { GetModuleHandleW(lp_module_nsame) };
+    if module.is_null() {
+        panic!("{}", unsafe { GetLastError() });
+    } else {
+        module
+    }
 }

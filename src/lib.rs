@@ -122,7 +122,7 @@ pub type LPSTR = *mut CHAR;
 // pub type LPTSTR = LPWSTR;
 pub type LPVOID = *mut c_void;
 pub type LPWORD = *mut WORD;
-
+pub type LPWSTR = *mut u16;
 pub type LRESULT = isize;
 
 //
@@ -611,6 +611,16 @@ extern "system" {
         flAllocationType: DWORD,
         flProtect: DWORD,
     ) -> LPVOID;
+    /// [`FormatMessageW`](https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-formatmessagew)
+    pub fn FormatMessageW(
+        dwFlags: DWORD,
+        lpSource: LPCVOID,
+        dwMessageId: DWORD,
+        dwLanguageId: DWORD,
+        lpBuffer: LPWSTR,
+        nSize: DWORD,
+        Arguments: todo!(va_list),
+    ) -> DWORD;
 
 }
 

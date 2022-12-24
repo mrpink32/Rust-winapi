@@ -619,7 +619,7 @@ extern "system" {
         dwLanguageId: DWORD,
         lpBuffer: LPWSTR,
         nSize: DWORD,
-        Arguments: todo!(va_list),
+        // Arguments: va_list, Todo!
     ) -> DWORD;
 
 }

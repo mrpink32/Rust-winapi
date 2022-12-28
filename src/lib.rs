@@ -733,6 +733,7 @@ extern "system" {
         cy: c_int,
         uFlags: UINT,
     ) -> BOOL;
+    pub fn FindWindowW(lpClassName: LPCWSTR, lpWindowName: LPCWSTR) -> HWND;
 }
 
 pub fn wide_null(string: &str) -> Vec<u16> {
@@ -772,7 +773,7 @@ pub fn get_last_error() -> DWORD {
 pub fn get_module_handle_w(lp_module_nsame: LPCWSTR) -> HMODULE {
     let module: HMODULE = unsafe { GetModuleHandleW(lp_module_nsame) };
     if module.is_null() {
-        panic!("{}", unsafe { GetLastError() });
+        panic!("Failed to get module handle: {}", unsafe { GetLastError() });
     } else {
         module
     }

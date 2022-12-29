@@ -182,6 +182,21 @@ pub const CS_VREDRAW: u32 = 0x0001;
 
 pub const CW_USEDEFAULT: c_int = 0x80000000_u32 as c_int;
 
+pub const IMAGE_BITMAP: UINT = 0;
+pub const IMAGE_CURSOR: UINT = 2;
+pub const IMAGE_ICON: UINT = 1;
+
+// Values for fuLoad parameter
+pub const LR_CREATEDIBSECTION: UINT = 0x00002000;
+pub const LR_DEFAULTCOLOR: UINT = 0x00000000;
+pub const LR_DEFAULTSIZE: UINT = 0x00000040;
+pub const LR_LOADFROMFILE: UINT = 0x00000010;
+pub const LR_LOADMAP3DCOLORS: UINT = 0x00001000;
+pub const LR_LOADTRANSPARENT: UINT = 0x00000020;
+pub const LR_MONOCHROME: UINT = 0x00000001;
+pub const LR_SHARED: UINT = 0x00008000;
+pub const LR_VGACOLOR: UINT = 0x00000080;
+
 pub const SW_HIDE: c_int = 0;
 pub const SW_SHOWNORMAL: c_int = 1;
 pub const SW_SHOWMINIMIZED: c_int = 2;
@@ -733,7 +748,19 @@ extern "system" {
         cy: c_int,
         uFlags: UINT,
     ) -> BOOL;
+    /// [`FindWindowW`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-findwindoww)
     pub fn FindWindowW(lpClassName: LPCWSTR, lpWindowName: LPCWSTR) -> HWND;
+    /// [`LoadIconW`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadiconw)
+    pub fn LoadIconW(hInstance: HINSTANCE, lpIconName: LPCWSTR) -> HICON;
+    /// [`LoadImageW`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagew)
+    pub fn LoadImageW(
+        hInst: HINSTANCE,
+        name: LPCWSTR,
+        image_type: UINT,
+        cx: c_int,
+        cy: c_int,
+        fuLoad: UINT,
+    ) -> HANDLE;
 }
 
 pub fn wide_null(string: &str) -> Vec<u16> {

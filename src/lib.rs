@@ -764,7 +764,7 @@ extern "system" {
         cy: c_int,
         fuLoad: UINT,
     ) -> HANDLE;
-    pub fn MAKEINTRESOURCEW(i: c_int) -> LPWSTR;
+    pub fn MAKEINTRESOURCEW(i: c_int);
 }
 
 pub fn wide_null(string: &str) -> Vec<u16> {

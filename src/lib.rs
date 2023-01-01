@@ -764,8 +764,10 @@ extern "system" {
         cy: c_int,
         fuLoad: UINT,
     ) -> HANDLE;
-    pub fn MAKEINTRESOURCEW(i: c_int);
 }
+
+#[link(name = "WinUser.h")]
+extern "system" {}
 
 pub fn wide_null(string: &str) -> Vec<u16> {
     string.encode_utf16().chain(Some(0)).collect()
@@ -784,9 +786,13 @@ fn rgb_test() {
     assert_eq!(rgb(0, 0, 255), 0b00000000_11111111_00000000_00000000);
 }
 
+pub const fn MAKEINTRESOURCEW(i: c_int) -> LPWSTR {
+    ((i as WORD) as ULONG_PTR) as LPWSTR
+}
+
 // wrappers
 
-// needs more wrapping
+// not finished:
 pub fn get_last_error() -> DWORD {
     unsafe { GetLastError() }
 }

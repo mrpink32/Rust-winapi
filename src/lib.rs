@@ -766,9 +766,6 @@ extern "system" {
     ) -> HANDLE;
 }
 
-#[link(name = "WinUser.h")]
-extern "system" {}
-
 pub fn wide_null(string: &str) -> Vec<u16> {
     string.encode_utf16().chain(Some(0)).collect()
 }

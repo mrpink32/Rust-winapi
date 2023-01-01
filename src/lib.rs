@@ -787,6 +787,8 @@ pub fn get_last_error() -> DWORD {
     unsafe { GetLastError() }
 }
 
+pub fn MAKEINTRESOURCEW(i: c_int) {}
+
 // pub fn register_class_w(window_class: &WNDCLASSW) -> Result<ATOM, ()> {
 //     let atom = unsafe { RegisterClassW(windows_class) };
 //     if atom == 0 {

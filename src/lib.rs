@@ -766,7 +766,7 @@ extern "system" {
     ) -> HANDLE;
 }
 
-#[link(name = "WinUser")]
+#[link(name = "WinUser.h")]
 extern "system" {
     pub fn MAKEINTRESOURCEW(i: c_int) -> LPWSTR;
     // {

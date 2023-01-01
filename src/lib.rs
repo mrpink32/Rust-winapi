@@ -764,14 +764,7 @@ extern "system" {
         cy: c_int,
         fuLoad: UINT,
     ) -> HANDLE;
-}
-
-#[link(name = "WinUser.h")]
-extern "system" {
     pub fn MAKEINTRESOURCEW(i: c_int) -> LPWSTR;
-    // {
-    //     ((i as WORD) as ULONG_PTR) as LPWSTR
-    // }
 }
 
 pub fn wide_null(string: &str) -> Vec<u16> {

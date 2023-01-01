@@ -182,6 +182,9 @@ pub const CS_VREDRAW: u32 = 0x0001;
 
 pub const CW_USEDEFAULT: c_int = 0x80000000_u32 as c_int;
 
+pub const IDI_APPLICATION: LPWSTR = MAKEINTRESOURCEW(32512);
+pub const IDI_WINLOGO: LPWSTR = MAKEINTRESOURCEW(32517);
+
 pub const IMAGE_BITMAP: UINT = 0;
 pub const IMAGE_CURSOR: UINT = 2;
 pub const IMAGE_ICON: UINT = 1;
@@ -787,7 +790,9 @@ pub fn get_last_error() -> DWORD {
     unsafe { GetLastError() }
 }
 
-pub fn MAKEINTRESOURCEW(i: c_int) {}
+pub const fn MAKEINTRESOURCEW(i: c_int) -> LPWSTR {
+    ((i as WORD) as ULONG_PTR) as LPWSTR
+}
 
 // pub fn register_class_w(window_class: &WNDCLASSW) -> Result<ATOM, ()> {
 //     let atom = unsafe { RegisterClassW(windows_class) };

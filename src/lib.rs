@@ -182,8 +182,8 @@ pub const CS_VREDRAW: u32 = 0x0001;
 
 pub const CW_USEDEFAULT: c_int = 0x80000000_u32 as c_int;
 
-pub const IDI_APPLICATION: LPWSTR = MAKEINTRESOURCEW(32512);
-pub const IDI_WINLOGO: LPWSTR = MAKEINTRESOURCEW(32517);
+// pub const IDI_APPLICATION: LPWSTR = MAKEINTRESOURCEW(32512);
+// pub const IDI_WINLOGO: LPWSTR = MAKEINTRESOURCEW(32517);
 
 pub const IMAGE_BITMAP: UINT = 0;
 pub const IMAGE_CURSOR: UINT = 2;
@@ -766,6 +766,14 @@ extern "system" {
     ) -> HANDLE;
 }
 
+#[link(name = "WinUser")]
+extern "system" {
+    pub fn MAKEINTRESOURCEW(i: c_int) -> LPWSTR;
+    // {
+    //     ((i as WORD) as ULONG_PTR) as LPWSTR
+    // }
+}
+
 pub fn wide_null(string: &str) -> Vec<u16> {
     string.encode_utf16().chain(Some(0)).collect()
 }
@@ -788,10 +796,6 @@ fn rgb_test() {
 // needs more wrapping
 pub fn get_last_error() -> DWORD {
     unsafe { GetLastError() }
-}
-
-pub const fn MAKEINTRESOURCEW(i: c_int) -> LPWSTR {
-    ((i as WORD) as ULONG_PTR) as LPWSTR
 }
 
 // pub fn register_class_w(window_class: &WNDCLASSW) -> Result<ATOM, ()> {
